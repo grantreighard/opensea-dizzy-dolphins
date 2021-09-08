@@ -1,4 +1,4 @@
-## OpenSea Creatures - Starter ERC721, ERC1155, and factory contracts
+## OpenSea DizzyDolphins - Starter ERC721, ERC1155, and factory contracts
 
 What's included:
 
@@ -50,7 +50,7 @@ DEPLOY_CREATURES_SALE=1 yarn truffle deploy --network rinkeby
 
 ### Minting tokens.
 
-After deploying to the Rinkeby network, there will be a contract on Rinkeby that will be viewable on [Rinkeby Etherscan](https://rinkeby.etherscan.io). For example, here is a [recently deployed contract](https://rinkeby.etherscan.io/address/0xeba05c5521a3b81e23d15ae9b2d07524bc453561). You should set this contract address and the address of your Metamask account as environment variables when running the minting script. If a [CreatureFactory was deployed](https://github.com/ProjectOpenSea/opensea-creatures/blob/master/migrations/2_deploy_contracts.js#L38), which the sample deploy steps above do, you'll need to specify its address below as it will be the owner on the NFT contract, and only it will have mint permissions. In that case, you won't need NFT_CONTRACT_ADDRESS, as all we need is the contract with mint permissions here.
+After deploying to the Rinkeby network, there will be a contract on Rinkeby that will be viewable on [Rinkeby Etherscan](https://rinkeby.etherscan.io). For example, here is a [recently deployed contract](https://rinkeby.etherscan.io/address/0xeba05c5521a3b81e23d15ae9b2d07524bc453561). You should set this contract address and the address of your Metamask account as environment variables when running the minting script. If a [DizzyDolphinFactory was deployed](https://github.com/ProjectOpenSea/opensea-creatures/blob/master/migrations/2_deploy_contracts.js#L38), which the sample deploy steps above do, you'll need to specify its address below as it will be the owner on the NFT contract, and only it will have mint permissions. In that case, you won't need NFT_CONTRACT_ADDRESS, as all we need is the contract with mint permissions here.
 
 ```
 export OWNER_ADDRESS="<my_address>"
@@ -78,7 +78,7 @@ If you're running a modified version of `sell.js` and not getting expected behav
 
 - Are you running a version of node compliant with the `engines` requirement in `package.json`? If no, try `nvm use; rm -rf node_modules; yarn`
 
-# About OpenSea Creature Accessories
+# About OpenSea DizzyDolphin Accessories
 
 This is a sample ERC-1155 contract for the purposes of demonstrating integration with the [OpenSea](https://opensea.io) marketplace for crypto collectibles. We also include:
 
@@ -92,7 +92,7 @@ On top of the features from the OpenSea ERC721 sample contracts above, ERC1155
 
 ## Configuring the Lootbox
 
-Open CreatureAccessoryLootbox.sol
+Open DizzyDolphinAccessoryLootbox.sol
 
 1. Change `Class` to reflect your rarity levels.
 2. Change `NUM_CLASSES` to reflect how many classes you have (this gets used for sizing fixed-length arrays in Solidity)

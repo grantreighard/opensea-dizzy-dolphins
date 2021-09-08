@@ -3,22 +3,22 @@
 pragma solidity ^0.8.0;
 
 import "./ERC721Tradable.sol";
-import "./Creature.sol";
+import "./DizzyDolphin.sol";
 import "./IFactoryERC721.sol";
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
 
 /**
- * @title CreatureLootBox
+ * @title DizzyDolphinLootBox
  *
- * CreatureLootBox - a tradeable loot box of Creatures.
+ * DizzyDolphinLootBox - a tradeable loot box of DizzyDolphins.
  */
-contract CreatureLootBox is ERC721Tradable {
-    uint256 NUM_CREATURES_PER_BOX = 3;
+contract DizzyDolphinLootBox is ERC721Tradable {
+    uint256 NUM_DOLPHINS_PER_BOX = 3;
     uint256 OPTION_ID = 0;
     address factoryAddress;
 
     constructor(address _proxyRegistryAddress, address _factoryAddress)
-        ERC721Tradable("CreatureLootBox", "LOOTBOX", _proxyRegistryAddress)
+        ERC721Tradable("DizzyDolphinLootBox", "LOOTBOX", _proxyRegistryAddress)
     {
         factoryAddress = _factoryAddress;
     }
@@ -27,7 +27,7 @@ contract CreatureLootBox is ERC721Tradable {
         require(ownerOf(_tokenId) == _msgSender());
 
         // Insert custom logic for configuring the item here.
-        for (uint256 i = 0; i < NUM_CREATURES_PER_BOX; i++) {
+        for (uint256 i = 0; i < NUM_DOLPHINS_PER_BOX; i++) {
             // Mint the ERC721 item(s).
             FactoryERC721 factory = FactoryERC721(factoryAddress);
             factory.mint(OPTION_ID, _msgSender());
@@ -37,11 +37,11 @@ contract CreatureLootBox is ERC721Tradable {
         _burn(_tokenId);
     }
 
-    function baseTokenURI() override public pure returns (string memory) {
+    function baseTokenURI() public pure override returns (string memory) {
         return "https://creatures-api.opensea.io/api/box/";
     }
 
     function itemsPerLootbox() public view returns (uint256) {
-        return NUM_CREATURES_PER_BOX;
+        return NUM_DOLPHINS_PER_BOX;
     }
 }

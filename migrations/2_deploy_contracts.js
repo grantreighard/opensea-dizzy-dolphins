@@ -1,16 +1,16 @@
-const Creature = artifacts.require("./Creature.sol");
-const CreatureFactory = artifacts.require("./CreatureFactory.sol");
-const CreatureLootBox = artifacts.require("./CreatureLootBox.sol");
-const CreatureAccessory = artifacts.require("../contracts/CreatureAccessory.sol");
-const CreatureAccessoryFactory = artifacts.require("../contracts/CreatureAccessoryFactory.sol");
-const CreatureAccessoryLootBox = artifacts.require(
-  "../contracts/CreatureAccessoryLootBox.sol"
+const DizzyDolphin = artifacts.require("./DizzyDolphin.sol");
+const DizzyDolphinFactory = artifacts.require("./DizzyDolphinFactory.sol");
+const DizzyDolphinLootBox = artifacts.require("./DizzyDolphinLootBox.sol");
+const DizzyDolphinAccessory = artifacts.require("../contracts/DizzyDolphinAccessory.sol");
+const DizzyDolphinAccessoryFactory = artifacts.require("../contracts/DizzyDolphinAccessoryFactory.sol");
+const DizzyDolphinAccessoryLootBox = artifacts.require(
+  "../contracts/DizzyDolphinAccessoryLootBox.sol"
 );
 const LootBoxRandomness = artifacts.require(
   "../contracts/LootBoxRandomness.sol"
 );
 
-const setupCreatureAccessories = require("../lib/setupCreatureAccessories.js");
+const setupDizzyDolphinAccessories = require("../lib/setupDizzyDolphinAccessories.js");
 
 // If you want to hardcode what deploys, comment out process.env.X and use
 // true/false;
@@ -32,50 +32,50 @@ module.exports = async (deployer, network, addresses) => {
   }
 
   if (DEPLOY_CREATURES) {
-    await deployer.deploy(Creature, proxyRegistryAddress, {gas: 5000000});
+    await deployer.deploy(DizzyDolphin, proxyRegistryAddress, {gas: 5000000});
   }
 
   if (DEPLOY_CREATURES_SALE) {
-    await deployer.deploy(CreatureFactory, proxyRegistryAddress, Creature.address, {gas: 7000000});
-    const creature = await Creature.deployed();
-    await creature.transferOwnership(CreatureFactory.address);
+    await deployer.deploy(DizzyDolphinFactory, proxyRegistryAddress, DizzyDolphin.address, {gas: 7000000});
+    const creature = await DizzyDolphin.deployed();
+    await creature.transferOwnership(DizzyDolphinFactory.address);
   }
 
-  if (DEPLOY_ACCESSORIES) {
-    await deployer.deploy(
-      CreatureAccessory,
-      proxyRegistryAddress,
-      { gas: 5000000 }
-    );
-    const accessories = await CreatureAccessory.deployed();
-    await setupCreatureAccessories.setupAccessory(
-      accessories,
-      addresses[0]
-    );
-  }
+  // if (DEPLOY_ACCESSORIES) {
+  //   await deployer.deploy(
+  //     DizzyDolphinAccessory,
+  //     proxyRegistryAddress,
+  //     { gas: 5000000 }
+  //   );
+  //   const accessories = await DizzyDolphinAccessory.deployed();
+  //   await setupDizzyDolphinAccessories.setupAccessory(
+  //     accessories,
+  //     addresses[0]
+  //   );
+  // }
 
-  if (DEPLOY_ACCESSORIES_SALE) {
-    await deployer.deploy(LootBoxRandomness);
-    await deployer.link(LootBoxRandomness, CreatureAccessoryLootBox);
-    await deployer.deploy(
-      CreatureAccessoryLootBox,
-      proxyRegistryAddress,
-      { gas: 6721975 }
-    );
-    const lootBox = await CreatureAccessoryLootBox.deployed();
-    await deployer.deploy(
-      CreatureAccessoryFactory,
-      proxyRegistryAddress,
-      CreatureAccessory.address,
-      CreatureAccessoryLootBox.address,
-      { gas: 5000000 }
-    );
-    const accessories = await CreatureAccessory.deployed();
-    const factory = await CreatureAccessoryFactory.deployed();
-    await accessories.transferOwnership(
-      CreatureAccessoryFactory.address
-    );
-    await setupCreatureAccessories.setupAccessoryLootBox(lootBox, factory);
-    await lootBox.transferOwnership(factory.address);
-  }
+  // if (DEPLOY_ACCESSORIES_SALE) {
+  //   await deployer.deploy(LootBoxRandomness);
+  //   await deployer.link(LootBoxRandomness, DizzyDolphinAccessoryLootBox);
+  //   await deployer.deploy(
+  //     DizzyDolphinAccessoryLootBox,
+  //     proxyRegistryAddress,
+  //     { gas: 6721975 }
+  //   );
+  //   const lootBox = await DizzyDolphinAccessoryLootBox.deployed();
+  //   await deployer.deploy(
+  //     DizzyDolphinAccessoryFactory,
+  //     proxyRegistryAddress,
+  //     DizzyDolphinAccessory.address,
+  //     DizzyDolphinAccessoryLootBox.address,
+  //     { gas: 5000000 }
+  //   );
+  //   const accessories = await DizzyDolphinAccessory.deployed();
+  //   const factory = await DizzyDolphinAccessoryFactory.deployed();
+  //   await accessories.transferOwnership(
+  //     DizzyDolphinAccessoryFactory.address
+  //   );
+  //   await setupDizzyDolphinAccessories.setupAccessoryLootBox(lootBox, factory);
+  //   await lootBox.transferOwnership(factory.address);
+  // }
 };

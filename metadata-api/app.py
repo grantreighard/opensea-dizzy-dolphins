@@ -76,13 +76,13 @@ ACCESSORIES_ATTS_GENERATION = [1, 1, 2, 1, 1, 3]
 
 CONTRACT_URI_METADATA = {
     'opensea-creatures': {
-        'name': 'OpenSea Creatures',
+        'name': 'OpenSea DizzyDolphins',
         'description': 'Friendly creatures of the sea.',
         'image': 'https://example.com/image.png',
         'external_link': 'https://github.com/ProjectOpenSea/opensea-creatures/'
     },
     'opensea-erc1155': {
-        'name': 'OpenSea Creature Accessories',
+        'name': 'OpenSea DizzyDolphin Accessories',
         'description': "Fun and useful accessories for your OpenSea creatures.",
         'image': 'https://example.com/image.png',
         'external_link': 'https://github.com/ProjectOpenSea/opensea-erc1155/'
@@ -126,7 +126,7 @@ def creature(token_id):
 
     return jsonify({
         'name': creature_name,
-        'description': 'Friendly OpenSea Creature that enjoys long swims in the ocean.',
+        'description': 'Friendly OpenSea DizzyDolphin that enjoys long swims in the ocean.',
         'image': image_url,
         'external_url': 'https://openseacreatures.io/%s' % token_id,
         'attributes': attributes
@@ -142,8 +142,8 @@ def creature_box(token_id):
     _add_attribute(attributes, 'number_inside', [3], token_id)
 
     return jsonify({
-        'name': 'Creature Loot Box',
-        'description': 'This lootbox contains some OpenSea Creatures! It can also be traded!',
+        'name': 'DizzyDolphin Loot Box',
+        'description': 'This lootbox contains some OpenSea DizzyDolphins! It can also be traded!',
         'image': image_url,
         'external_url': 'https://openseacreatures.io/%s' % token_id,
         'attributes': attributes
@@ -222,7 +222,7 @@ def accessory_box(token_id):
 
     return jsonify({
         'name': 'Accessory Loot Box',
-        'description': 'This lootbox contains some OpenSea Creature accessories! It can also be traded!',
+        'description': 'This lootbox contains some OpenSea DizzyDolphin accessories! It can also be traded!',
         'image': image_url,
         'external_url': 'https://openseacreatures.io/box/accessory/%s' % token_id,
         'attributes': attributes

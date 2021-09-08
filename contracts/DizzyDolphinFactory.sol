@@ -5,10 +5,10 @@ pragma solidity ^0.8.0;
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
 import "openzeppelin-solidity/contracts/utils/Strings.sol";
 import "./IFactoryERC721.sol";
-import "./Creature.sol";
-import "./CreatureLootBox.sol";
+import "./DizzyDolphin.sol";
+import "./DizzyDolphinLootBox.sol";
 
-contract CreatureFactory is FactoryERC721, Ownable {
+contract DizzyDolphinFactory is FactoryERC721, Ownable {
     using Strings for string;
 
     event Transfer(
@@ -25,44 +25,44 @@ contract CreatureFactory is FactoryERC721, Ownable {
     /*
      * Enforce the existence of only 100 OpenSea creatures.
      */
-    uint256 CREATURE_SUPPLY = 100;
+    uint256 DOLPHIN_SUPPLY = 10000;
 
     /*
-     * Three different options for minting Creatures (basic, premium, and gold).
+     * Three different options for minting DizzyDolphins (basic, premium, and gold).
      */
     uint256 NUM_OPTIONS = 3;
-    uint256 SINGLE_CREATURE_OPTION = 0;
-    uint256 MULTIPLE_CREATURE_OPTION = 1;
+    uint256 SINGLE_DOLPHIN_OPTION = 0;
+    uint256 MULTIPLE_DOLPHIN_OPTION = 1;
     uint256 LOOTBOX_OPTION = 2;
-    uint256 NUM_CREATURES_IN_MULTIPLE_CREATURE_OPTION = 4;
+    uint256 NUM_DOLPHINS_IN_MULTIPLE_DOLPHIN_OPTION = 4;
 
     constructor(address _proxyRegistryAddress, address _nftAddress) {
         proxyRegistryAddress = _proxyRegistryAddress;
         nftAddress = _nftAddress;
         lootBoxNftAddress = address(
-            new CreatureLootBox(_proxyRegistryAddress, address(this))
+            new DizzyDolphinLootBox(_proxyRegistryAddress, address(this))
         );
 
         fireTransferEvents(address(0), owner());
     }
 
-    function name() override external pure returns (string memory) {
-        return "OpenSeaCreature Item Sale";
+    function name() external pure override returns (string memory) {
+        return "DizzyDolphin Item Sale";
     }
 
-    function symbol() override external pure returns (string memory) {
+    function symbol() external pure override returns (string memory) {
         return "CPF";
     }
 
-    function supportsFactoryInterface() override public pure returns (bool) {
+    function supportsFactoryInterface() public pure override returns (bool) {
         return true;
     }
 
-    function numOptions() override public view returns (uint256) {
+    function numOptions() public view override returns (uint256) {
         return NUM_OPTIONS;
     }
 
-    function transferOwnership(address newOwner) override public onlyOwner {
+    function transferOwnership(address newOwner) public override onlyOwner {
         address _prevOwner = owner();
         super.transferOwnership(newOwner);
         fireTransferEvents(_prevOwner, newOwner);
@@ -74,7 +74,7 @@ contract CreatureFactory is FactoryERC721, Ownable {
         }
     }
 
-    function mint(uint256 _optionId, address _toAddress) override public {
+    function mint(uint256 _optionId, address _toAddress) public override {
         // Must be sent from the owner proxy or owner.
         ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);
         assert(
@@ -84,48 +84,53 @@ contract CreatureFactory is FactoryERC721, Ownable {
         );
         require(canMint(_optionId));
 
-        Creature openSeaCreature = Creature(nftAddress);
-        if (_optionId == SINGLE_CREATURE_OPTION) {
-            openSeaCreature.mintTo(_toAddress);
-        } else if (_optionId == MULTIPLE_CREATURE_OPTION) {
+        DizzyDolphin dolphin = DizzyDolphin(nftAddress);
+        if (_optionId == SINGLE_DOLPHIN_OPTION) {
+            dolphin.mintTo(_toAddress);
+        } else if (_optionId == MULTIPLE_DOLPHIN_OPTION) {
             for (
                 uint256 i = 0;
-                i < NUM_CREATURES_IN_MULTIPLE_CREATURE_OPTION;
+                i < NUM_DOLPHINS_IN_MULTIPLE_DOLPHIN_OPTION;
                 i++
             ) {
-                openSeaCreature.mintTo(_toAddress);
+                dolphin.mintTo(_toAddress);
             }
         } else if (_optionId == LOOTBOX_OPTION) {
-            CreatureLootBox openSeaCreatureLootBox = CreatureLootBox(
+            DizzyDolphinLootBox dolphinLootBox = DizzyDolphinLootBox(
                 lootBoxNftAddress
             );
-            openSeaCreatureLootBox.mintTo(_toAddress);
+            dolphinLootBox.mintTo(_toAddress);
         }
     }
 
-    function canMint(uint256 _optionId) override public view returns (bool) {
+    function canMint(uint256 _optionId) public view override returns (bool) {
         if (_optionId >= NUM_OPTIONS) {
             return false;
         }
 
-        Creature openSeaCreature = Creature(nftAddress);
-        uint256 creatureSupply = openSeaCreature.totalSupply();
+        DizzyDolphin dolphin = DizzyDolphin(nftAddress);
+        uint256 dolphinSupply = dolphin.totalSupply();
 
         uint256 numItemsAllocated = 0;
-        if (_optionId == SINGLE_CREATURE_OPTION) {
+        if (_optionId == SINGLE_DOLPHIN_OPTION) {
             numItemsAllocated = 1;
-        } else if (_optionId == MULTIPLE_CREATURE_OPTION) {
-            numItemsAllocated = NUM_CREATURES_IN_MULTIPLE_CREATURE_OPTION;
+        } else if (_optionId == MULTIPLE_DOLPHIN_OPTION) {
+            numItemsAllocated = NUM_DOLPHINS_IN_MULTIPLE_DOLPHIN_OPTION;
         } else if (_optionId == LOOTBOX_OPTION) {
-            CreatureLootBox openSeaCreatureLootBox = CreatureLootBox(
+            DizzyDolphinLootBox dolphinLootBox = DizzyDolphinLootBox(
                 lootBoxNftAddress
             );
-            numItemsAllocated = openSeaCreatureLootBox.itemsPerLootbox();
+            numItemsAllocated = dolphinLootBox.itemsPerLootbox();
         }
-        return creatureSupply < (CREATURE_SUPPLY - numItemsAllocated);
+        return dolphinSupply < (DOLPHIN_SUPPLY - numItemsAllocated);
     }
 
-    function tokenURI(uint256 _optionId) override external view returns (string memory) {
+    function tokenURI(uint256 _optionId)
+        external
+        view
+        override
+        returns (string memory)
+    {
         return string(abi.encodePacked(baseURI, Strings.toString(_optionId)));
     }
 

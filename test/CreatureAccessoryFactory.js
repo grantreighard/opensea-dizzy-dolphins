@@ -2,7 +2,7 @@
 
 const truffleAssert = require('truffle-assertions');
 
-const setup = require('../lib/setupCreatureAccessories.js');
+const setup = require('../lib/setupDizzyDolphinAccessories.js');
 const testVals = require('../lib/testValuesCommon.js');
 const vals = require('../lib/valuesCommon.js');
 
@@ -14,9 +14,9 @@ const MockProxyRegistry = artifacts.require(
 const LootBoxRandomness = artifacts.require(
   "../contracts/LootBoxRandomness.sol"
 );
-const CreatureAccessory = artifacts.require("../contracts/CreatureAccessory.sol");
-const CreatureAccessoryFactory = artifacts.require("../contracts/CreatureAccessoryFactory.sol");
-const CreatureAccessoryLootBox = artifacts.require("../contracts/CreatureAccessoryLootBox.sol");
+const DizzyDolphinAccessory = artifacts.require("../contracts/DizzyDolphinAccessory.sol");
+const DizzyDolphinAccessoryFactory = artifacts.require("../contracts/DizzyDolphinAccessoryFactory.sol");
+const DizzyDolphinAccessoryLootBox = artifacts.require("../contracts/DizzyDolphinAccessoryLootBox.sol");
 const TestForReentrancyAttack = artifacts.require(
   "../contracts/TestForReentrancyAttack.sol"
 );
@@ -32,7 +32,7 @@ const toBN = web3.utils.toBN;
 const toTokenId = optionId => optionId;
 
 
-contract("CreatureAccessoryFactory", (accounts) => {
+contract("DizzyDolphinAccessoryFactory", (accounts) => {
   const TOTAL_OPTIONS = 9;
 
   const owner = accounts[0];
@@ -53,20 +53,20 @@ contract("CreatureAccessoryFactory", (accounts) => {
   before(async () => {
     proxy = await MockProxyRegistry.new();
     await proxy.setProxy(owner, proxyForOwner);
-    creatureAccessory = await CreatureAccessory.new(proxy.address);
-    CreatureAccessoryLootBox.link(LootBoxRandomness);
-    myLootBox = await CreatureAccessoryLootBox.new(
+    creatureAccessory = await DizzyDolphinAccessory.new(proxy.address);
+    DizzyDolphinAccessoryLootBox.link(LootBoxRandomness);
+    myLootBox = await DizzyDolphinAccessoryLootBox.new(
       proxy.address,
       { gas: 6721975 }
     );
-    myFactory = await CreatureAccessoryFactory.new(
+    myFactory = await DizzyDolphinAccessoryFactory.new(
       proxy.address,
       creatureAccessory.address,
       myLootBox.address
     );
     attacker = await TestForReentrancyAttack.new();
     await attacker.setFactoryAddress(myFactory.address);
-    await setup.setupCreatureAccessories(
+    await setup.setupDizzyDolphinAccessories(
       creatureAccessory,
       myFactory,
       myLootBox,
@@ -87,7 +87,7 @@ contract("CreatureAccessoryFactory", (accounts) => {
     it('should return the correct name', async () => {
       assert.equal(
         await myFactory.name(),
-        'OpenSea Creature Accessory Pre-Sale'
+        'OpenSea DizzyDolphin Accessory Pre-Sale'
       );
     });
   });
@@ -124,7 +124,7 @@ contract("CreatureAccessoryFactory", (accounts) => {
       await truffleAssert.fails(
         myFactory.mint(vals.CLASS_COMMON, userA, 1000, "0x0", { from: userA }),
         truffleAssert.ErrorType.revert,
-        'CreatureAccessoryFactory#_mint: CANNOT_MINT_MORE'
+        'DizzyDolphinAccessoryFactory#_mint: CANNOT_MINT_MORE'
       );
     });
 
@@ -189,7 +189,7 @@ contract("CreatureAccessoryFactory", (accounts) => {
    * environment, due to the OwnableDelegateProxy. To get around
    * this, in order to test this function below, you'll need to:
    *
-   * 1. go to CreatureAccessoryFactory.sol, and
+   * 1. go to DizzyDolphinAccessoryFactory.sol, and
    * 2. modify _isOwnerOrProxy
    *
    * --> Modification is:
@@ -207,7 +207,7 @@ contract("CreatureAccessoryFactory", (accounts) => {
        });
 
     // With unmodified code, this fails with:
-    //   CreatureAccessoryFactory#_mint: CANNOT_MINT_MORE
+    //   DizzyDolphinAccessoryFactory#_mint: CANNOT_MINT_MORE
     // which is the correct behavior (no reentrancy) for the wrong reason
     // (the attacker is not the owner or proxy).
 

@@ -2,7 +2,7 @@
 
 const truffleAssert = require('truffle-assertions');
 
-const setup = require('../lib/setupCreatureAccessories.js');
+const setup = require('../lib/setupDizzyDolphinAccessories.js');
 const testVals = require('../lib/testValuesCommon.js');
 const vals = require('../lib/valuesCommon.js');
 
@@ -14,10 +14,10 @@ const MockProxyRegistry = artifacts.require(
 const LootBoxRandomness = artifacts.require(
   "../contracts/LootBoxRandomness.sol"
 );
-const CreatureAccessory = artifacts.require("../contracts/CreatureAccessory.sol");
-const CreatureAccessoryFactory = artifacts.require("../contracts/CreatureAccessoryFactory.sol");
-const CreatureAccessoryLootBox = artifacts.require(
-  "../contracts/CreatureAccessoryLootBox.sol"
+const DizzyDolphinAccessory = artifacts.require("../contracts/DizzyDolphinAccessory.sol");
+const DizzyDolphinAccessoryFactory = artifacts.require("../contracts/DizzyDolphinAccessoryFactory.sol");
+const DizzyDolphinAccessoryLootBox = artifacts.require(
+  "../contracts/DizzyDolphinAccessoryLootBox.sol"
 );
 
 
@@ -103,7 +103,7 @@ const compareTokenTotals = (totals, spec, option) => {
 
 /* Tests */
 
-contract("CreatureAccessoryLootBox", (accounts) => {
+contract("DizzyDolphinAccessoryLootBox", (accounts) => {
   const owner = accounts[0];
   const userA = accounts[1];
   const userB = accounts[2];
@@ -117,13 +117,13 @@ contract("CreatureAccessoryLootBox", (accounts) => {
   before(async () => {
     proxy = await MockProxyRegistry.new();
     await proxy.setProxy(owner, proxyForOwner);
-    creatureAccessory = await CreatureAccessory.new(proxy.address);
-    CreatureAccessoryLootBox.link(LootBoxRandomness);
-    lootBox = await CreatureAccessoryLootBox.new(
+    creatureAccessory = await DizzyDolphinAccessory.new(proxy.address);
+    DizzyDolphinAccessoryLootBox.link(LootBoxRandomness);
+    lootBox = await DizzyDolphinAccessoryLootBox.new(
       proxy.address,
       { gas: 6721975 }
     );
-    factory = await CreatureAccessoryFactory.new(
+    factory = await DizzyDolphinAccessoryFactory.new(
       proxy.address,
       creatureAccessory.address,
       lootBox.address

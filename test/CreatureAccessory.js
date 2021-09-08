@@ -1,17 +1,17 @@
 /* Contracts in this test */
 
-const CreatureAccessory = artifacts.require(
-  "../contracts/CreatureAccessory.sol"
+const DizzyDolphinAccessory = artifacts.require(
+  "../contracts/DizzyDolphinAccessory.sol"
 );
 
 
-contract("CreatureAccessory", (accounts) => {
+contract("DizzyDolphinAccessory", (accounts) => {
   const URI_BASE = 'https://creatures-api.opensea.io';
   const CONTRACT_URI = `${URI_BASE}/contract/opensea-erc1155`;
   let creatureAccessory;
 
   before(async () => {
-    creatureAccessory = await CreatureAccessory.deployed();
+    creatureAccessory = await DizzyDolphinAccessory.deployed();
   });
 
   // This is all we test for now
